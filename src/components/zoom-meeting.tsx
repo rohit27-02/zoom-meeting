@@ -1,6 +1,7 @@
 'use client'
 import { ZoomMtg } from "@zoomus/websdk";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface MeetingDetails {
     id: number;
@@ -11,6 +12,10 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
 }) => {
     const query = useSearchParams();
     const zak = query.get("code") || ""
+    useEffect(() => {
+        console.log(zak)
+    }, [zak])
+
     const joinMeeting = async () => {
         try {
             ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.2/lib', '/av');
@@ -23,8 +28,8 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
                 isSupportAV: true,
                 success: (success: any) => {
                     ZoomMtg.join({
-                        sdkKey: process.env.ZOOM_CLIENT_ID,
-                        signature: generateSignature(process.env.ZOOM_CLIENT_ID, process.env.ZOOM_CLIENT_SECRET, meetingDetails.id, 0),
+                        sdkKey: "pOJF_dfeStiKIvxWYF36ig",
+                        signature: generateSignature("pOJF_dfeStiKIvxWYF36ig", "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingDetails.id, 0),
                         meetingNumber: meetingDetails.id,
                         passWord: "",
                         userName: "rahul",
@@ -45,23 +50,23 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
         try {
             ZoomMtg.init({
                 leaveUrl: "leaveUrl", // https://example.com/thanks-for-joining
-                success: (success:any) => {
+                success: (success: any) => {
                     ZoomMtg.join({
-                        sdkKey: process.env.ZOOM_CLIENT_ID,
-                        signature: generateSignature(process.env.ZOOM_CLIENT_ID, process.env.ZOOM_CLIENT_SECRET, meetingDetails.id, 0),
+                        sdkKey: "pOJF_dfeStiKIvxWYF36ig",
+                        signature: generateSignature("pOJF_dfeStiKIvxWYF36ig","R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingDetails.id, 0),
                         meetingNumber: meetingDetails.id,
                         passWord: "",
                         userName: "rahul",
                         zak: zak, // the host's ZAK token
-                        success: (success:any) => {
+                        success: (success: any) => {
                             console.log(success)
                         },
-                        error: (error:any) => {
+                        error: (error: any) => {
                             console.log(error)
                         }
                     })
                 },
-                error: (error:any) => {
+                error: (error: any) => {
                     console.log(error)
                 }
             })
