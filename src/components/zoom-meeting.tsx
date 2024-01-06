@@ -76,7 +76,7 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
     }
 
     return (
-        <div className="flex gap-8">
+        <div className="flex z-[9999] gap-8">
             <a href={`https://zoom.us/oauth/authorize?response_type=code&client_id=pOJF_dfeStiKIvxWYF36ig&redirect_uri=${process.env.NEXT_PUBLIC_URL}`}>authorize</a>
             <button onClick={startMeeting}>Start Meeting</button>
             <button onClick={joinMeeting}>Join Meeting</button>
