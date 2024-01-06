@@ -1,6 +1,6 @@
 const KJUR = require('jsrsasign')
 
-function generateSignature(key: string | undefined, secret: string | undefined, meetingNumber: number, role: number) {
+export function generateSignature(key: string | undefined, secret: string | undefined, meetingNumber: number, role: number) {
 
   const iat = Math.round(new Date().getTime() / 1000) - 30
   const exp = iat + 60 * 60 * 2

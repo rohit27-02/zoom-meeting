@@ -1,4 +1,5 @@
 'use client'
+import { generateSignature } from "@/utils/signature-generator";
 import { ZoomMtg } from "@zoomus/websdk";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
