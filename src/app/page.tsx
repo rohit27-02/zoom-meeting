@@ -6,6 +6,6 @@ const DynamicZoomMeeting = dynamic(() => import('@/components/zoom-meeting'), {
 
 export default function Home() {
   return (
-    <DynamicZoomMeeting meetingDetails={{ id: 78882606250 }} />
+    <DynamicZoomMeeting meetingDetails={{ id: 77861894050 }} />
   );
 }
