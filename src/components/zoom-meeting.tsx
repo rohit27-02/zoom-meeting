@@ -27,6 +27,7 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
                 leaveUrl: "your-leave-url",
                 isSupportAV: true,
                 success: (success: any) => {
+                    console.log("hi done here")
                     ZoomMtg.join({
                         sdkKey: "pOJF_dfeStiKIvxWYF36ig",
                         signature: generateSignature("pOJF_dfeStiKIvxWYF36ig", "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingDetails.id, 0),
@@ -48,9 +49,15 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
     };
     const startMeeting = async () => {
         try {
+            ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.2/lib', '/av');
+            ZoomMtg.preLoadWasm();
+            ZoomMtg.prepareWebSDK();
+            ZoomMtg.i18n.load('en-US')
+            ZoomMtg.i18n.reload('en-US')
             ZoomMtg.init({
                 leaveUrl: "leaveUrl", // https://example.com/thanks-for-joining
                 success: (success: any) => {
+                    console.log("hi done here")
                     ZoomMtg.join({
                         sdkKey: "pOJF_dfeStiKIvxWYF36ig",
                         signature: generateSignature("pOJF_dfeStiKIvxWYF36ig","R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingDetails.id, 0),
