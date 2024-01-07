@@ -16,6 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script async src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script async src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <script async src="https://source.zoom.us/2.18.0/lib/vendor/react-dom.min.js"></script>
+        <script async src="https://source.zoom.us/2.18.0/lib/vendor/redux.min.js"></script>
+        <script async src="https://source.zoom.us/2.18.0/lib/vendor/redux-thunk.min.js"></script>
+        <script async src="https://source.zoom.us/2.18.0/lib/vendor/lodash.min.js"></script>
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
