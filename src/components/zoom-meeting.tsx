@@ -1,4 +1,6 @@
 'use client'
+import { getaccessToken } from "@/actions/get-access-token";
+import { scheduleMeeting } from "@/actions/schedule-meeting";
 import { ZoomMtg } from "@zoomus/websdk";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -125,56 +127,13 @@ const ZoomMeeting = () => {
         }
     };
 
-    const getaccessToken = async () => {
-        const data = new URLSearchParams();
-        data.append("code", authToken);
-        data.append("grant_type", "authorization_code");
-        data.append("redirect_uri", process.env.NEXT_PUBLIC_URL || "");
-        data.append("client_id", "0RG_LglYTBS2kvwVDiAYw");
-        data.append("client_secret",'a1Gh3vHjChowcQBQo3uUwCigO2XZEsG4');
-        const res = await fetch("https://zoom.us/oauth/token", {
-            method: "POST",
-            body: data,
-        });
-        const json = await res.json();
-        console.log(json)
-        if (json.access_token) {
-            setaccesstoken(json.access_token);
-        }
-    };
-
-    const scheduleMeeting = async()=>{
-        const meetingData = {
-            topic: 'Sample Meeting',
-            type: 2,
-            start_time: Date.now() + 2,
-            duration: 60,
-            timezone: 'America/New_York',
-            agenda: 'Discuss important matters',
-            settings: {
-              host_video: true,
-              participant_video: true,
-              join_before_host: false,
-              mute_upon_entry: false,
-              watermark: false,
-              use_pmi: false,
-              approval_type: 2,
-              registration_type: 1,
-              audio: 'both',
-              auto_recording: 'none',
-            },
-          };
-          const res = await fetch("https://api.zoom.us/v2/users/me/meetings",{
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${accesstoken}`,
-            },
-            body: JSON.stringify(meetingData),
-          })
-          const json = await res.json();
-          console.log(json)
-          setmeetingDetails({id:json.id,password:json.password})
+    const schedulemeeting = async()=>{
+        const md = await scheduleMeeting({accesstoken:accesstoken})
+        setmeetingDetails(md.json)
+    }
+    const accessToken = async ()=>{
+        const at = await getaccessToken({authToken:authToken})
+        setaccesstoken(at)
     }
 
     return (
@@ -185,8 +144,8 @@ const ZoomMeeting = () => {
             >
                 authorize
             </Link>
-            <button onClick={getaccessToken}>get access token</button>
-            <button onClick={scheduleMeeting}>scheduleMeeting</button>
+            <button onClick={accessToken}>get access token</button>
+            <button onClick={schedulemeeting}>scheduleMeeting</button>
             <button onClick={startMeeting}>Start Meeting</button>
             <button onClick={joinMeeting}>Join Meeting</button>
         </div>
