@@ -64,7 +64,7 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
 
             <div>
               <label className="" htmlFor="start_time">start time</label>
-              <input value={meetingDetails.start_time} onChange={(e)=>handleChange(e)} id="start_time" type="date" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+              <input value={meetingDetails.start_time} onChange={(e)=>handleChange(e)} id="start_time" type="datetime-local" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 

@@ -16,10 +16,19 @@ ZoomMtg.i18n.reload('en-US');
 const ZoomMeeting = () => {
     const router = useRouter();
     const query = useSearchParams();
-    const authToken = query.get("code") || "";
+    const [authToken, setauthToken] = useState("")
     const [token, settoken] = useState("");
     const [accesstoken, setaccesstoken] = useState("");
     const [meetingDetails, setmeetingDetails] = useState({ id: "", password: "" })
+    const [showForm, setshowForm] = useState(false)
+
+    useEffect(() => {
+        setshowForm(true)
+        if(authToken){
+            accessToken
+        }
+    }, [authToken])
+
 
     // useEffect(() => {
     //     console.log("access token : ", authToken);
@@ -130,10 +139,10 @@ const ZoomMeeting = () => {
 
     const schedulemeeting = async () => {
         router.push(`https://zoom.us/oauth/authorize?response_type=code&client_id=0RG_LglYTBS2kvwVDiAYw&redirect_uri=${process.env.NEXT_PUBLIC_URL}`)
-        accessToken
-        console.log("auth",authToken)
-        console.log("access",accesstoken)
-
+        const token = query.get("code");
+        setauthToken(token || "")
+        console.log("auth", authToken)
+        console.log("access", accesstoken)
     }
     const accessToken = async () => {
         const at = await getaccessToken({ authToken: authToken })
@@ -141,18 +150,18 @@ const ZoomMeeting = () => {
     }
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center gap-10 p-10">
-            <div className="flex z-[9999] fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
+        <div className="h-screen z-[9999] w-screen flex items-center justify-center gap-10 p-10">
+            <div className="flex fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
                 <button onClick={schedulemeeting}>scheduleMeeting</button>
                 <button onClick={startMeeting}>Start Meeting</button>
                 <button onClick={joinMeeting}>Join Meeting</button>
             </div>
-            <ScheduleMeetingForm setmeetinginfo={setmeetingDetails} accesstoken={accesstoken}/>
-            <div>
+            {showForm && <ScheduleMeetingForm setmeetinginfo={setmeetingDetails} accesstoken={accesstoken} />}
+            {showForm && <div>
                 <h1 className="text-xl">Meeting Details</h1>
                 <p>meeting id : {meetingDetails.id}</p>
                 <p>meeting password : {meetingDetails.password}</p>
-            </div>
+            </div>}
         </div>
     );
 };
