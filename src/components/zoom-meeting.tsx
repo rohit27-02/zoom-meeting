@@ -20,7 +20,6 @@ const ZoomMeeting = () => {
     const [token, settoken] = useState("");
     const [accesstoken, setaccesstoken] = useState("");
     const [meetingDetails, setmeetingDetails] = useState({ id: "", password: "" })
-    const [showForm, setshowForm] = useState(false)
 
     // useEffect(() => {
     //     console.log("access token : ", authToken);
@@ -132,7 +131,6 @@ const ZoomMeeting = () => {
     const schedulemeeting = async () => {
         router.push(`https://zoom.us/oauth/authorize?response_type=code&client_id=0RG_LglYTBS2kvwVDiAYw&redirect_uri=${process.env.NEXT_PUBLIC_URL}`)
         accessToken
-        setshowForm(true)
         console.log("auth",authToken)
         console.log("access",accesstoken)
 
@@ -149,12 +147,12 @@ const ZoomMeeting = () => {
                 <button onClick={startMeeting}>Start Meeting</button>
                 <button onClick={joinMeeting}>Join Meeting</button>
             </div>
-            {showForm && <ScheduleMeetingForm setmeetinginfo={setmeetingDetails} accesstoken={accesstoken}/>}
-            {showForm && <div>
+            <ScheduleMeetingForm setmeetinginfo={setmeetingDetails} accesstoken={accesstoken}/>
+            <div>
                 <h1 className="text-xl">Meeting Details</h1>
                 <p>meeting id : {meetingDetails.id}</p>
                 <p>meeting password : {meetingDetails.password}</p>
-            </div>}
+            </div>
         </div>
     );
 };
