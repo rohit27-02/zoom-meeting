@@ -35,12 +35,14 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
       ...meetingDetails,
       [id]: value,
     });
+    console.log(meetingDetails)
   }
 
   const scheduleMeet = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await scheduleMeeting({ accesstoken: accesstoken, meetingData: meetingDetails })
     const info =  res.json
+    console.log(info)
     setmeetinginfo(info)
   }
   return (
