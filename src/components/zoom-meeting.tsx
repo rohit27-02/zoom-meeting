@@ -53,7 +53,7 @@ const ZoomMeeting = () => {
                     rootElement.style.display = "block";
                 }
             }
-            const signature = ZoomMtg.generateSDKSignature({ sdkKey: "pOJF_dfeStiKIvxWYF36ig", sdkSecret: "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingNumber: meetingDetails.id.toString(), role: "0" })
+            const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingNumber: meetingDetails.id.toString(), role: "0" })
 
             if (ZoomMtg.init) {
                 ZoomMtg.init({
@@ -64,8 +64,8 @@ const ZoomMeeting = () => {
 
                         if (ZoomMtg.join) {
                             ZoomMtg.join({
-                                passWord: "9kBuMe",
-                                sdkKey: "pOJF_dfeStiKIvxWYF36ig",
+                                passWord: meetingDetails.password,
+                                sdkKey: "0RG_LglYTBS2kvwVDiAYw",
                                 signature: signature,
                                 meetingNumber: meetingDetails.id,
                                 userName: "rahul",
@@ -98,13 +98,12 @@ const ZoomMeeting = () => {
                             }
                         }
                         console.log(success);
-                        const signature = ZoomMtg.generateSDKSignature({ sdkKey: "pOJF_dfeStiKIvxWYF36ig", sdkSecret: "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingNumber: meetingDetails.id.toString(), role: "1" })
+                        const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "a1Gh3vHjChowcQBQo3uUwCigO2XZEsG4", meetingNumber: meetingDetails.id.toString(), role: "1" })
                         if (ZoomMtg.join) {
                             ZoomMtg.join({
-                                passWord: "9kBuMe",
-                                sdkKey: "pOJF_dfeStiKIvxWYF36ig",
+                                passWord: meetingDetails.password,
+                                sdkKey: "0RG_LglYTBS2kvwVDiAYw",
                                 signature: signature,
-                                userEmail: "khandelwalrahul743@gmail.com",
                                 meetingNumber: meetingDetails.id,
                                 userName: "rahul",
                                 zak: token,
