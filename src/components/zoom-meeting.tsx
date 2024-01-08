@@ -130,12 +130,6 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
 
     return (
         <div className="flex z-[9999] fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
-            <Link
-            
-                href={`https://zoom.us/oauth/authorize?response_type=code&client_id=pOJF_dfeStiKIvxWYF36ig&redirect_uri=${process.env.NEXT_PUBLIC_URL}/meeting`}
-            >
-                authorize
-            </Link>
             <button onClick={startMeeting}>Start Meeting</button>
             <button onClick={joinMeeting}>Join Meeting</button>
         </div>
