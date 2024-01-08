@@ -1,12 +1,14 @@
-import Link from 'next/link';
-
-export default function Home() {
+import React from 'react';
+import dynamic from 'next/dynamic';
+const DynamicZoomMeeting = dynamic(() => import('@/components/zoom-meeting'), {
+  ssr: false, // Prevent server-side rendering
+});
+const Page = () => {
   return (
-    <Link
-
-      href={`https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.ZOOM_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_URL}`}
-    >
-      authorize
-    </Link>
+    <div>
+          <DynamicZoomMeeting meetingDetails={{ id: 72187836905 }} />
+    </div>
   );
-}
+};
+
+export default Page;

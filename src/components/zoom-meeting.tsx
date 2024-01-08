@@ -20,12 +20,12 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
     const accessToken = query.get("code") || "ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ";
     const [token, settoken] = useState("ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ");
 
-      useEffect(() => {
+    useEffect(() => {
         console.log("access token : ", accessToken);
         if (fetchZak) {
-          fetchZak(accessToken);
+            fetchZak(accessToken);
         }
-      }, [accessToken]);
+    }, [accessToken]);
 
 
     const fetchZak = async (accessToken: string) => {
@@ -130,6 +130,12 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
 
     return (
         <div className="flex z-[9999] fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
+            <Link
+
+                href={`https://zoom.us/oauth/authorize?response_type=code&client_id=0RG_LglYTBS2kvwVDiAYw&redirect_uri=${process.env.NEXT_PUBLIC_URL}`}
+            >
+                authorize
+            </Link>
             <button onClick={startMeeting}>Start Meeting</button>
             <button onClick={joinMeeting}>Join Meeting</button>
         </div>
