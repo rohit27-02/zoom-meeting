@@ -150,8 +150,8 @@ const ZoomMeeting = () => {
     }
 
     return (
-        <div className="h-screen z-[9999] w-screen flex items-center justify-center gap-10 p-10">
-            <div className="flex fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
+        <div className="h-screen  w-screen flex items-center justify-center gap-10 p-10">
+            <div className="flex z-[9999] fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
                 <button onClick={schedulemeeting}>scheduleMeeting</button>
                 <button onClick={startMeeting}>Start Meeting</button>
                 <button onClick={joinMeeting}>Join Meeting</button>

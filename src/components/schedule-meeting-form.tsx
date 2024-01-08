@@ -45,7 +45,7 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
   }
   return (
     <div>
-      <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md  mt-20">
+      <section className="max-w-4xl z-[9999] p-6 mx-auto rounded-md shadow-md  mt-20">
         <h1 className="text-xl font-bold capitalize">Meeting Details</h1>
         <form onSubmit={scheduleMeet}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
