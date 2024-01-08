@@ -1,114 +1,82 @@
 'use client'
-import { useState } from 'react';
+import { scheduleMeeting } from '@/actions/schedule-meeting';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
-interface MeetingDetails {
-    topic: string;
-    start_time: string;
-    duration: string;
-    type: string;
-}
+const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
+  accesstoken: string, setmeetinginfo: Dispatch<SetStateAction<{
+    id: string;
+    password: string;
+  }>>
+}) => {
+  const [meetingDetails, setmeetingDetails] = useState({
+    topic: 'Sample Meeting',
+    type: 2,
+    start_time: Date.now() + 2,
+    duration: 60,
+    timezone: 'America/New_York',
+    agenda: 'Discuss important matters',
+    settings: {
+      host_video: true,
+      participant_video: true,
+      join_before_host: false,
+      mute_upon_entry: false,
+      watermark: false,
+      use_pmi: false,
+      approval_type: 2,
+      registration_type: 1,
+      audio: 'both',
+      auto_recording: 'none',
+    },
+  })
 
-const ScheduleMeetingForm: React.FC = () => {
-    const [meetingDetails, setMeetingDetails] = useState<MeetingDetails>({
-        topic: '',
-        start_time: '',
-        duration: '',
-        type: '',
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setmeetingDetails({
+      ...meetingDetails,
+      [id]: value,
     });
+  }
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMeetingDetails({
-            ...meetingDetails,
-            [e.target.name]: e.target.value,
-        });
-    };
+  const scheduleMeet = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const res = await scheduleMeeting({ accesstoken: accesstoken, meetingData: meetingDetails })
+    const info =  res.json
+    setmeetinginfo(info)
+  }
+  return (
+    <div>
+      <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md  mt-20">
+        <h1 className="text-xl font-bold capitalize">Meeting Details</h1>
+        <form onSubmit={scheduleMeet}>
+          <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+            <div>
+              <label className="" htmlFor="topic">topic</label>
+              <input value={meetingDetails.topic} onChange={(e)=>handleChange(e)} id="topic" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+            </div>
+            <div>
+              <label className="" htmlFor="agenda">agenda</label>
+              <input value={meetingDetails.agenda} onChange={(e)=>handleChange(e)} id="agenda" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+            </div>
+            <div>
+              <label className="" htmlFor="duration">duration</label>
+              <input value={meetingDetails.duration} onChange={(e)=>handleChange(e)} id="duration" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+            </div>
 
-    const handleScheduleMeeting = async () => {
-        try {
-            console.log(meetingDetails)
-            const response = await fetch('/schedule', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(meetingDetails),
-            });
-            console.log(response)
-            // Add any additional logic or UI updates upon successful scheduling
-        } catch (error) {
-            console.error('Error scheduling meeting:', error);
-            // Handle error and display appropriate messages to the user
-        }
-    };
+            <div>
+              <label className="" htmlFor="start_time">start time</label>
+              <input value={meetingDetails.start_time} onChange={(e)=>handleChange(e)} id="start_time" type="date" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+            </div>
+          </div>
 
-    return (
-        <div className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
-        <div className="mb-4">
-          <label htmlFor="topic" className="block text-sm font-medium text-gray-600">
-            Topic:
-          </label>
-          <input
-            id="topic"
-            name="topic"
-            type="text"
-            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
-            value={meetingDetails.topic}
-            onChange={handleInputChange}
-          />
-        </div>
-      
-        <div className="mb-4">
-          <label htmlFor="start_time" className="block text-sm font-medium text-gray-600">
-            Start Time:
-          </label>
-          <input
-            id="start_time"
-            name="start_time"
-            type="datetime-local"
-            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
-            value={meetingDetails.start_time}
-            onChange={handleInputChange}
-          />
-        </div>
-      
-        <div className="mb-4">
-          <label htmlFor="duration" className="block text-sm font-medium text-gray-600">
-            Duration (minutes):
-          </label>
-          <input
-            id="duration"
-            name="duration"
-            type="number"
-            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
-            value={meetingDetails.duration}
-            onChange={handleInputChange}
-          />
-        </div>
-      
-        <div className="mb-4">
-          <label htmlFor="type" className="block text-sm font-medium text-gray-600">
-            Type (1 for Instant, 2 for Scheduled):
-          </label>
-          <input
-            id="type"
-            name="type"
-            type="number"
-            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
-            value={meetingDetails.type}
-            onChange={handleInputChange}
-          />
-        </div>
-      
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue"
-          onClick={handleScheduleMeeting}
-        >
-          Schedule Meeting
-        </button>
-      </div>
-      
+          <div className="flex justify-end mt-6">
+            <button type='submit' className="px-6 py-2 leading-5 transition-colors duration-200 transform bg-orange-500 rounded-md hover:bg-orange-700 text-white focus:outline-none focus:bg-gray-600">Schedule</button>
+          </div>
+        </form>
+      </section>
 
-    );
+
+    </div>
+  );
 };
 
 export default ScheduleMeetingForm;
