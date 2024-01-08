@@ -4,37 +4,34 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface MeetingDetails {
-    id: number;
-}
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.2/lib', '/av');
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
 ZoomMtg.i18n.load('en-US');
 ZoomMtg.i18n.reload('en-US');
 
-const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
-    meetingDetails,
-}) => {
+const ZoomMeeting = () => {
     const query = useSearchParams();
-    const accessToken = query.get("code") || "ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ";
-    const [token, settoken] = useState("ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ");
+    const authToken = query.get("code") || "";
+    const [token, settoken] = useState("");
+    const [accesstoken, setaccesstoken] = useState("");
+    const [meetingDetails, setmeetingDetails] = useState({id:"",password:""})
 
     useEffect(() => {
-        console.log("access token : ", accessToken);
+        console.log("access token : ", authToken);
         if (fetchZak) {
-            fetchZak(accessToken);
+            fetchZak(authToken);
         }
-    }, [accessToken]);
+    }, [authToken]);
 
 
-    const fetchZak = async (accessToken: string) => {
+    const fetchZak = async (authToken: string) => {
         const zakReq = await fetch(
             `https://api.zoom.us/v2/users/me/token?type=zak`,
             {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${accessToken || "ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ"
+                    Authorization: `Bearer ${authToken || "ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ"
                         }`,
                 },
             }
@@ -128,6 +125,56 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
         }
     };
 
+    const getaccessToken = async () => {
+        const data = new URLSearchParams();
+        data.append("code", authToken);
+        data.append("grant_type", "authorization_code");
+        data.append("redirect_uri", process.env.NEXT_PUBLIC_URL || "");
+        data.append("client_id", process.env.ZOOM_CLIENT_ID || "");
+        data.append("client_secret", process.env.ZOOM_CLIENT_SECRET || "");
+        const res = await fetch("https://zoom.us/oauth/token", {
+            method: "POST",
+            body: data,
+        });
+        const json = await res.json();
+        if (json.access_token) {
+            setaccesstoken(json.access_token);
+        }
+    };
+
+    const scheduleMeeting = async()=>{
+        const meetingData = {
+            topic: 'Sample Meeting',
+            type: 2,
+            start_time: Date.now() + 2,
+            duration: 60,
+            timezone: 'America/New_York',
+            agenda: 'Discuss important matters',
+            settings: {
+              host_video: true,
+              participant_video: true,
+              join_before_host: false,
+              mute_upon_entry: false,
+              watermark: false,
+              use_pmi: false,
+              approval_type: 2,
+              registration_type: 1,
+              audio: 'both',
+              auto_recording: 'none',
+            },
+          };
+          const res = await fetch("https://api.zoom.us/v2/users/me/meetings",{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accesstoken}`,
+            },
+            body: JSON.stringify(meetingData),
+          })
+          const json = await res.json();
+          setmeetingDetails({id:json.id,password:json.password})
+    }
+
     return (
         <div className="flex z-[9999] fixed top-0 bg-orange-500 text-xl p-4 text-white gap-8">
             <Link
@@ -136,6 +183,8 @@ const ZoomMeeting: React.FC<{ meetingDetails: MeetingDetails }> = ({
             >
                 authorize
             </Link>
+            <button onClick={getaccessToken}>get access token</button>
+            <button onClick={scheduleMeeting}>scheduleMeeting</button>
             <button onClick={startMeeting}>Start Meeting</button>
             <button onClick={joinMeeting}>Join Meeting</button>
         </div>
