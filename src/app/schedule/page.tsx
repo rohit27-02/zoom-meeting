@@ -5,6 +5,12 @@ import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ZoomMtg } from "@zoomus/websdk";
 
+ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.2/lib', '/av');
+ZoomMtg.preLoadWasm();
+ZoomMtg.prepareWebSDK();
+ZoomMtg.i18n.load('en-US');
+ZoomMtg.i18n.reload('en-US');
+
 const Page = () => {
     const [meetinginfo, setmeetinginfo] = useState({ id: "", password: "", joinurl: "", starturl: "" })
     const query = useSearchParams();
@@ -60,7 +66,7 @@ const Page = () => {
         setmeetinginfo(info)
     }
 
-        const fetchZak = async (authToken: string) => {
+    const fetchZak = async (authToken: string) => {
         const zakReq = await fetch(
             `https://api.zoom.us/v2/users/me/token?type=zak`,
             {
