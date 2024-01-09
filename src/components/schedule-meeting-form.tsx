@@ -33,9 +33,9 @@ const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
 
   const accessToken = async () => {
     const at = await getaccessToken({ authToken: authtoken })
+    console.log(at)
     setaccesstoken(at)
   }
-  accessToken()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -55,6 +55,7 @@ const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
   }
   return (
     <div>
+      <button onClick={()=>accessToken}>access token</button>
       <section className="max-w-4xl z-[9999] p-6 mx-auto rounded-md shadow-md  mt-20">
         <h1 className="text-xl font-bold capitalize">Meeting Details</h1>
         <form onSubmit={scheduleMeet}>
