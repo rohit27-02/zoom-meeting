@@ -3,10 +3,12 @@ import { getaccessToken } from '@/actions/get-access-token';
 import { scheduleMeeting } from '@/actions/schedule-meeting';
 import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ZoomMtg } from "@zoomus/websdk";
 
 const Page = () => {
-    const [meetinginfo, setmeetinginfo] = useState({ id: "", password: "" })
+    const [meetinginfo, setmeetinginfo] = useState({ id: "", password: "", joinurl: "", starturl: "" })
     const query = useSearchParams();
+    const [token, settoken] = useState("");
     const [meetingDetails, setmeetingDetails] = useState({
         topic: 'Sample Meeting',
         type: 2,
@@ -30,9 +32,9 @@ const Page = () => {
     const [accesstoken, setaccesstoken] = useState("")
 
     const accessToken = async (authToken: string) => {
-        console.log("auth token",authToken)
+        console.log("auth token", authToken)
         const at = await getaccessToken({ authToken: authToken })
-        console.log("access token",at)
+        console.log("access token", at)
         setaccesstoken(at)
     }
 
@@ -57,6 +59,106 @@ const Page = () => {
         console.log(info)
         setmeetinginfo(info)
     }
+
+        const fetchZak = async (authToken: string) => {
+        const zakReq = await fetch(
+            `https://api.zoom.us/v2/users/me/token?type=zak`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${authToken || "ixPfTrr5codJbC7pJkTQ8mf9-N7MIR9sQ"
+                        }`,
+                },
+            }
+        );
+
+        const { token } = await zakReq.json();
+        console.log("zak token : ", token);
+        if (token) {
+            settoken(token);
+        }
+    };
+
+    const joinMeeting = async () => {
+        try {
+            if (typeof document != undefined) {
+                const rootElement = document.getElementById("zmmtg-root");
+                if (rootElement) {
+                    rootElement.style.display = "block";
+                }
+            }
+            const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingNumber: meetinginfo.id.toString(), role: "0" })
+
+            if (ZoomMtg.init) {
+                ZoomMtg.init({
+                    leaveUrl: process.env.NEXT_PUBLIC_URL || "",
+                    isSupportAV: true,
+                    success: (success: any) => {
+                        console.log(success);
+
+                        if (ZoomMtg.join) {
+                            ZoomMtg.join({
+                                sdkKey: "0RG_LglYTBS2kvwVDiAYw",
+                                signature: signature,
+                                meetingNumber: meetinginfo.id,
+                                userName: "rahul",
+                                success: (success: any) => {
+                                    console.log(success);
+                                },
+                                error: (error: any) => {
+                                    console.log(error);
+                                },
+                            });
+                        }
+                    },
+                });
+            }
+        } catch (error) {
+            console.error("Error joining Zoom meeting:", error);
+        }
+    };
+
+    const startMeeting = async () => {
+        await fetchZak
+        try {
+            if (ZoomMtg.init) {
+                ZoomMtg.init({
+                    leaveUrl: process.env.NEXT_PUBLIC_URL || "",
+                    success: (success: any) => {
+                        if (typeof document != undefined) {
+                            const rootElement = document.getElementById("zmmtg-root");
+                            if (rootElement) {
+                                rootElement.style.display = "block";
+                            }
+                        }
+                        console.log(success);
+                        const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "GvMitwI9uXuA0GGP4kEe6wTueSBgN347", meetingNumber: meetinginfo.id.toString(), role: "1" })
+                        if (ZoomMtg.join) {
+                            ZoomMtg.join({
+                                passWord: meetinginfo.password,
+                                sdkKey: "0RG_LglYTBS2kvwVDiAYw",
+                                signature: signature,
+                                meetingNumber: meetinginfo.id,
+                                userName: "rahul",
+                                zak: token,
+                                success: (success: any) => {
+                                    console.log(success);
+                                },
+                                error: (error: any) => {
+                                    console.log(error);
+                                },
+                            });
+                        }
+                    },
+                    error: (error: any) => {
+                        console.log(error);
+                    },
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (
@@ -93,7 +195,11 @@ const Page = () => {
                 <h1 className="text-xl">Meeting Details</h1>
                 <p>meeting id : {meetinginfo.id}</p>
                 <p>meeting password : {meetinginfo.password}</p>
+                <p>start url : {meetinginfo.starturl}</p>
+                <p>join url : {meetinginfo.joinurl}</p>
             </div>
+            <button onClick={startMeeting}>Start Meeting</button>
+            <button onClick={joinMeeting}>Join Meeting</button>
         </div>
     );
 };

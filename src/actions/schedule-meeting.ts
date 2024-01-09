@@ -17,5 +17,5 @@ export const scheduleMeeting = async ({
   });
   const json = await res.json();
   console.log(json);
-  return { json: { id: json.id, password: json.password } };
+  return { json: { id: json.id, password: json.password,joinurl:json.join_url,starturl:json.start_url } };
 };
