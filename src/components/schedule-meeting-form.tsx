@@ -1,9 +1,10 @@
 'use client'
+import { getaccessToken } from '@/actions/get-access-token';
 import { scheduleMeeting } from '@/actions/schedule-meeting';
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction,useState } from 'react';
 
-const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
-  accesstoken: string, setmeetinginfo: Dispatch<SetStateAction<{
+const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
+  authtoken: string, setmeetinginfo: Dispatch<SetStateAction<{
     id: string;
     password: string;
   }>>
@@ -28,6 +29,13 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
       auto_recording: 'none',
     },
   })
+  const [accesstoken, setaccesstoken] = useState("")
+
+  const accessToken = async () => {
+    const at = await getaccessToken({ authToken: authtoken })
+    setaccesstoken(at)
+  }
+  accessToken()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -41,7 +49,7 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
   const scheduleMeet = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await scheduleMeeting({ accesstoken: accesstoken, meetingData: meetingDetails })
-    const info =  res.json
+    const info = res.json
     console.log(info)
     setmeetinginfo(info)
   }
@@ -53,20 +61,20 @@ const ScheduleMeetingForm = ({ accesstoken, setmeetinginfo }: {
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label className="" htmlFor="topic">topic</label>
-              <input value={meetingDetails.topic} onChange={(e)=>handleChange(e)} id="topic" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+              <input value={meetingDetails.topic} onChange={(e) => handleChange(e)} id="topic" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
               <label className="" htmlFor="agenda">agenda</label>
-              <input value={meetingDetails.agenda} onChange={(e)=>handleChange(e)} id="agenda" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+              <input value={meetingDetails.agenda} onChange={(e) => handleChange(e)} id="agenda" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
               <label className="" htmlFor="duration">duration</label>
-              <input value={meetingDetails.duration} onChange={(e)=>handleChange(e)} id="duration" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+              <input value={meetingDetails.duration} onChange={(e) => handleChange(e)} id="duration" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
 
             <div>
               <label className="" htmlFor="start_time">start time</label>
-              <input value={meetingDetails.start_time} onChange={(e)=>handleChange(e)} id="start_time" type="datetime-local" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
+              <input value={meetingDetails.start_time} onChange={(e) => handleChange(e)} id="start_time" type="datetime-local" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 
