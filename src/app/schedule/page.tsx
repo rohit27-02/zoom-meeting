@@ -30,8 +30,9 @@ const Page = () => {
     const [accesstoken, setaccesstoken] = useState("")
 
     const accessToken = async (authToken: string) => {
+        console.log("auth token",authToken)
         const at = await getaccessToken({ authToken: authToken })
-        console.log(at)
+        console.log("access token",at)
         setaccesstoken(at)
     }
 
