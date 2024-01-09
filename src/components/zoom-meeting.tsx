@@ -96,7 +96,7 @@ const ZoomMeeting = () => {
     //                         }
     //                     }
     //                     console.log(success);
-    //                     const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "a1Gh3vHjChowcQBQo3uUwCigO2XZEsG4", meetingNumber: meetingDetails.id.toString(), role: "1" })
+    //                     const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "GvMitwI9uXuA0GGP4kEe6wTueSBgN347", meetingNumber: meetingDetails.id.toString(), role: "1" })
     //                     if (ZoomMtg.join) {
     //                         ZoomMtg.join({
     //                             passWord: meetingDetails.password,
