@@ -1,7 +1,7 @@
 'use client'
 import { getaccessToken } from '@/actions/get-access-token';
 import { scheduleMeeting } from '@/actions/schedule-meeting';
-import React, { ChangeEvent, Dispatch, SetStateAction,useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction,useEffect,useState } from 'react';
 
 const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
   authtoken: string, setmeetinginfo: Dispatch<SetStateAction<{
@@ -37,6 +37,11 @@ const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
     setaccesstoken(at)
   }
 
+  useEffect(() => {
+    accessToken()
+  }, [])
+  
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setmeetingDetails({
@@ -55,7 +60,6 @@ const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
   }
   return (
     <div>
-      <button onClick={()=>accessToken}>access token</button>
       <section className="max-w-4xl z-[9999] p-6 mx-auto rounded-md shadow-md  mt-20">
         <h1 className="text-xl font-bold capitalize">Meeting Details</h1>
         <form onSubmit={scheduleMeet}>
