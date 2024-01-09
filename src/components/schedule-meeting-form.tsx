@@ -39,7 +39,7 @@ const ScheduleMeetingForm = ({ setmeetinginfo, authtoken }: {
 
   useEffect(() => {
     accessToken()
-  }, [])
+  }, [authtoken])
   
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
