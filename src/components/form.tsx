@@ -96,7 +96,7 @@ const Form = () => {
                     rootElement.style.display = "block";
                 }
             }
-            const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "R0aSVMGl5POSVCMM7L26TfiS2jMLc05Y", meetingNumber: meetinginfo.id.toString(), role: "0" })
+            const signature = ZoomMtg.generateSDKSignature({ sdkKey: "0RG_LglYTBS2kvwVDiAYw", sdkSecret: "GvMitwI9uXuA0GGP4kEe6wTueSBgN347", meetingNumber: meetinginfo.id.toString(), role: "0" })
 
             if (ZoomMtg.init) {
                 ZoomMtg.init({
