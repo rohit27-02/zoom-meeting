@@ -47,6 +47,9 @@ const Form = () => {
     useEffect(() => {
         const authToken = query.get("code") || ""
         accessToken(authToken)
+        if(typeof document != undefined ){
+            document.getElementById("zmmtg-root")?.classList.add("hidden")
+        }
     }, [query])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -166,7 +169,7 @@ const Form = () => {
         }
     };
 
-
+     
     return (
         <div>
             <section className="max-w-4xl z-[9999] p-6 mx-auto rounded-md shadow-md  mt-20">
